@@ -1,8 +1,9 @@
 import TasksRepository from '../repositories/TasksRepository';
+import { Request, Response } from 'express';
 
 class TaskController {
-  index() {
-    return TasksRepository.findAll();
+  index(request: Request, response: Response) {
+    response.send(TasksRepository.findAll());
   }
 }
 
