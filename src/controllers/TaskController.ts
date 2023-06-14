@@ -7,6 +7,13 @@ class TaskController {
     response.json(tasks);
   }
 
+  async show(request: Request, response: Response) {
+    const { id } = request.params;
+
+    const task = await TasksRepository.findById(id);
+    response.status(200).json(task);
+  }
+
   async store(request: Request, response: Response) {
     const { title, description, category_id } = request.body;
 

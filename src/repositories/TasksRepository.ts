@@ -6,6 +6,11 @@ class TasksRepository implements IRepository<ITask> {
     return await query('SELECT * FROM tasks');
   }
 
+  async findById(id: string) {
+    const [row] = await query('SELECT * FROM tasks WHERE id = $1', [id]);
+    return row;
+  }
+
   async create({ title, description, status, category_id }: ITask) {
     const [row] = await query(
       `
