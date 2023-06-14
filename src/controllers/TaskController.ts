@@ -11,11 +11,20 @@ class TaskController {
     const { id } = request.params;
 
     const task = await TasksRepository.findById(id);
+
+    if (!task) {
+      return response.status(404).json({ error: 'Task not found!' });
+    }
+
     response.status(200).json(task);
   }
 
   async store(request: Request, response: Response) {
     const { title, description, category_id } = request.body;
+
+    if (!title) {
+      return response.status(400).json({ error: 'Task title is required' });
+    }
 
     const taskCreated = await TasksRepository.create({
       title,
@@ -39,6 +48,11 @@ class TaskController {
       },
       id,
     );
+
+    if (!taskUpdated) {
+      return response.status(404).json({ error: 'Task not found!' });
+    }
+
     response.status(201).json(taskUpdated);
   }
 
