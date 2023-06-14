@@ -20,6 +20,17 @@ class TasksRepository implements IRepository<ITask> {
     return row;
   }
 
+  async findAllByCategory(category_id: string) {
+    const tasks = await query(
+      `
+      SELECT tasks.*, categories.name as category_name FROM tasks
+      LEFT JOIN categories ON categories.id = category_id
+      WHERE tasks.category_id = $1`,
+      [category_id],
+    );
+    return tasks;
+  }
+
   async create({ title, description, status, category_id }: ITask) {
     const [row] = await query(
       `

@@ -62,6 +62,18 @@ class TaskController {
     await TasksRepository.delete(id);
     response.sendStatus(204);
   }
+
+  async listAllByCategory(request: Request, response: Response) {
+    const { category_id } = request.params;
+
+    const tasks = await TasksRepository.findAllByCategory(category_id);
+
+    if (tasks.length === 0) {
+      return response.status(404).json({ error: 'Tasks not found' });
+    }
+
+    response.status(200).json(tasks);
+  }
 }
 
 export default new TaskController();
