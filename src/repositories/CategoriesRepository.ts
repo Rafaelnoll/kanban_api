@@ -7,6 +7,11 @@ class CategoriesRepository implements Repository<ICategory> {
     return await query('SELECT * FROM categories;');
   }
 
+  async findById(id: string) {
+    const [row] = await query('SELECT * FROM categories WHERE id = $1;', [id]);
+    return row;
+  }
+
   async create({ name }: ICategory) {
     const [row] = await query(
       `
