@@ -4,7 +4,7 @@ import TasksRepository from '../repositories/TasksRepository';
 class TaskController {
   async index(request: Request, response: Response) {
     const tasks = await TasksRepository.findAll();
-    response.send(tasks);
+    response.json(tasks);
   }
 }
 
