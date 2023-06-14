@@ -3,7 +3,10 @@ import ITask from '../interfaces/Task';
 import query from '../database';
 class TasksRepository implements IRepository<ITask> {
   async findAll() {
-    return await query('SELECT * FROM tasks');
+    return await query(`
+      SELECT tasks.*, categories.name as category_name FROM tasks
+      LEFT JOIN categories ON categories.id = category_id
+    `);
   }
 
   async findById(id: string) {
