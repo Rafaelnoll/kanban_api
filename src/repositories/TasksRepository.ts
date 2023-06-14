@@ -1,9 +1,9 @@
-import tasks from '../mock/Tasks';
 import IRepository from '../interfaces/Repository';
 import ITask from '../interfaces/Task';
+import query from '../database';
 class TasksRepository implements IRepository<ITask> {
-  findAll() {
-    return tasks;
+  async findAll() {
+    return await query('SELECT * FROM tasks');
   }
 }
 

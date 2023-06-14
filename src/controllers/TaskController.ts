@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import TasksRepository from '../repositories/TasksRepository';
 
 class TaskController {
-  index(request: Request, response: Response) {
-    response.send(TasksRepository.findAll());
+  async index(request: Request, response: Response) {
+    const tasks = await TasksRepository.findAll();
+    response.send(tasks);
   }
 }
 
