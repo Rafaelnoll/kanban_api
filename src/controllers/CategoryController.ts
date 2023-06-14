@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 
 import CategoriesRepository from '../repositories/CategoriesRepository';
+import IController from '../interfaces/Controller';
 
-class CategoryController {
+class CategoryController implements IController {
   async index(request: Request, response: Response) {
     const categories = await CategoriesRepository.findAll();
     response.status(200).json(categories);
