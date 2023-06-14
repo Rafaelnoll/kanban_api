@@ -7,7 +7,7 @@ class CategoriesRepository implements Repository<ICategory> {
     return await query('SELECT * FROM categories;');
   }
 
-  async create(name: string) {
+  async create({ name }: ICategory) {
     const [row] = await query(
       `
       INSERT INTO categories(name)
@@ -17,6 +17,19 @@ class CategoriesRepository implements Repository<ICategory> {
       [name],
     );
 
+    return row;
+  }
+
+  async update({ name }: ICategory, id: string) {
+    const [row] = await query(
+      `
+      UPDATE categories
+      SET name = $2
+      WHERE id = $1
+      RETURNING *
+    `,
+      [id, name],
+    );
     return row;
   }
 }
