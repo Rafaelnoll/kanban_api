@@ -5,14 +5,14 @@ import CategoriesRepository from '../repositories/CategoriesRepository';
 class CategoryController {
   async index(request: Request, response: Response) {
     const categories = await CategoriesRepository.findAll();
-    response.json(categories);
+    response.status(200).json(categories);
   }
 
   async store(request: Request, response: Response) {
     const { name } = request.body;
 
     const category = await CategoriesRepository.create(name);
-    response.json(category);
+    response.status(201).json(category);
   }
 }
 

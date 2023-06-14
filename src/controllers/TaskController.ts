@@ -4,7 +4,7 @@ import TasksRepository from '../repositories/TasksRepository';
 class TaskController {
   async index(request: Request, response: Response) {
     const tasks = await TasksRepository.findAll();
-    response.json(tasks);
+    response.status(200).json(tasks);
   }
 
   async show(request: Request, response: Response) {
@@ -23,7 +23,7 @@ class TaskController {
       status: 'DO',
       category_id,
     });
-    response.json(taskCreated);
+    response.status(201).json(taskCreated);
   }
 
   async update(request: Request, response: Response) {
@@ -39,7 +39,7 @@ class TaskController {
       },
       id,
     );
-    response.json(taskUpdated);
+    response.status(201).json(taskUpdated);
   }
 
   async delete(request: Request, response: Response) {
