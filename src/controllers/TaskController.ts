@@ -34,6 +34,13 @@ class TaskController {
     );
     response.json(taskUpdated);
   }
+
+  async delete(request: Request, response: Response) {
+    const { id } = request.params;
+
+    await TasksRepository.delete(id);
+    response.sendStatus(204);
+  }
 }
 
 export default new TaskController();
