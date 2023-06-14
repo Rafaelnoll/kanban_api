@@ -17,6 +17,20 @@ class TasksRepository implements IRepository<ITask> {
     );
     return row;
   }
+
+  async update({ title, description, status, category_id }: ITask, id: string) {
+    const [row] = await query(
+      `
+      UPDATE tasks
+      SET title = $2, description = $3, status = $4, category_id = $5
+      WHERE id = $1
+      RETURNING *
+      `,
+      [id, title, description, status, category_id],
+    );
+
+    return row;
+  }
 }
 
 export default new TasksRepository();

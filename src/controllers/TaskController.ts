@@ -18,6 +18,22 @@ class TaskController {
     });
     response.json(taskCreated);
   }
+
+  async update(request: Request, response: Response) {
+    const { title, description, status, category_id } = request.body;
+    const { id } = request.params;
+
+    const taskUpdated = await TasksRepository.update(
+      {
+        title,
+        description,
+        status,
+        category_id,
+      },
+      id,
+    );
+    response.json(taskUpdated);
+  }
 }
 
 export default new TaskController();
