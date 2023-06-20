@@ -20,16 +20,22 @@ class TaskController {
   }
 
   async store(request: Request, response: Response) {
-    const { title, description, category_id } = request.body;
+    const { title, description, status, category_id } = request.body;
 
     if (!title) {
       return response.status(400).json({ error: 'Task title is required' });
     }
 
+    if (status && !['DO', 'DOING', 'DONE'].includes(status)) {
+      return response
+        .status(400)
+        .json({ error: "Field status must be 'DO', 'DONE' or 'DOING'" });
+    }
+
     const taskCreated = await TasksRepository.create({
       title,
       description,
-      status: 'DO',
+      status,
       category_id,
     });
     response.status(201).json(taskCreated);

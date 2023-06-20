@@ -31,14 +31,19 @@ class TasksRepository implements IRepository<ITask> {
     return tasks;
   }
 
-  async create({ title, description, status, category_id }: ITask) {
+  async create({
+    title,
+    description,
+    status = 'DO',
+    category_id = null,
+  }: ITask) {
     const [row] = await query(
       `
       INSERT INTO tasks(title, description, status, category_id)
       VALUES($1, $2, $3, $4)
       RETURNING *
     `,
-      [title, description, status, category_id],
+      [title, description, status, category_id === null ? null : category_id],
     );
     return row;
   }
