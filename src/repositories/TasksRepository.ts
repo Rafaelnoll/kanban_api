@@ -48,7 +48,10 @@ class TasksRepository implements IRepository<ITask> {
     return row;
   }
 
-  async update({ title, description, status, category_id }: ITask, id: string) {
+  async update(
+    { title, description, status = 'DO', category_id = null }: ITask,
+    id: string,
+  ) {
     const [row] = await query(
       `
       UPDATE tasks
@@ -56,7 +59,13 @@ class TasksRepository implements IRepository<ITask> {
       WHERE id = $1
       RETURNING *
       `,
-      [id, title, description, status, category_id],
+      [
+        id,
+        title,
+        description,
+        status,
+        category_id === null ? null : category_id,
+      ],
     );
 
     return row;
