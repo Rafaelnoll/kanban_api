@@ -57,7 +57,9 @@ class TasksRepository implements IRepository<ITask> {
       UPDATE tasks
       SET title = $2, description = $3, status = $4, category_id = $5
       WHERE id = $1
-      RETURNING *
+      RETURNING tasks.* , (
+        SELECT name FROM categories WHERE categories.id = tasks.category_id
+      ) AS category_name;
       `,
       [
         id,
