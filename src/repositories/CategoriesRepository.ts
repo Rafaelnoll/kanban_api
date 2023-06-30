@@ -4,7 +4,12 @@ import ICategory from '../interfaces/Category';
 
 class CategoriesRepository implements Repository<ICategory> {
   async findAll() {
-    return await query('SELECT * FROM categories;');
+    return await query(`
+      SELECT categories.*, COUNT(tasks.id) as tasks_count
+      FROM categories
+      LEFT JOIN tasks ON tasks.category_id = categories.id
+      GROUP BY categories.id, categories.name;
+    `);
   }
 
   async findById(id: string) {
