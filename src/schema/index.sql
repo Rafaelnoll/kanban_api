@@ -14,5 +14,5 @@ CREATE TABLE IF NOT EXISTS tasks(
   status VARCHAR NOT NULL CHECK (status IN ('DO', 'DOING', 'DONE')),
   description VARCHAR,
   category_id UUID,
-  FOREIGN KEY (category_id) REFERENCES categories(id)
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
