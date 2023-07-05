@@ -41,7 +41,9 @@ class TasksRepository implements IRepository<ITask> {
       `
       INSERT INTO tasks(title, description, status, category_id)
       VALUES($1, $2, $3, $4)
-      RETURNING *
+      RETURNING tasks.* , (
+        SELECT name FROM categories WHERE categories.id = tasks.category_id
+      ) AS category_name;
     `,
       [title, description, status, category_id === null ? null : category_id],
     );
