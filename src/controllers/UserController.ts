@@ -25,6 +25,12 @@ class UserController {
       return response.status(400).json({ error: 'Password is required' });
     }
 
+    const userAlreadyExists = await UserRepository.findByEmail(email);
+
+    if (userAlreadyExists) {
+      return response.status(400).json({ error: 'User already exists' });
+    }
+
     const hashOfPassword = HashGenetator.passwordToHash(password);
 
     await UserRepository.create({
