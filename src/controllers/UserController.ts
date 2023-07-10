@@ -42,6 +42,30 @@ class UserController {
     response.sendStatus(204);
   }
 
+  async update(request: Request, response: Response) {
+    const { username, email } = request.body;
+    const { id } = request.params;
+
+    const userUpdated: IUser = await UserRepository.update(
+      {
+        email,
+        username,
+      },
+      id,
+    );
+
+    if (!userUpdated) {
+      return response.status(404).json({ error: 'User not found!' });
+    }
+
+    const filtredUserFields = {
+      username: userUpdated.username,
+      email: userUpdated.email,
+    };
+
+    response.status(201).json(filtredUserFields);
+  }
+
   async delete(request: Request, response: Response) {
     const { id } = request.params;
 

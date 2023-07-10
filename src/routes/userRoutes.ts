@@ -7,5 +7,6 @@ const router = Router();
 router.get('/users', UserController.index);
 router.post('/users', UserController.store);
 router.delete('/users/:id', UserController.delete);
+router.put('/users/:id', UserController.update);
 
 export default router;
