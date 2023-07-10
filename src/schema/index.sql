@@ -16,3 +16,11 @@ CREATE TABLE IF NOT EXISTS tasks(
   category_id UUID,
   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS users(
+  id UUID NOT NULL UNIQUE DEFAULT uuid_generate_V4(),
+  username VARCHAR NOT NULL,
+  email VARCHAR NOT NULL UNIQUE,
+  password VARCHAR NOT NULL,
+  PRIMARY KEY (id)
+);
