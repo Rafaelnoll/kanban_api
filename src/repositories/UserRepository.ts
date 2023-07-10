@@ -18,6 +18,10 @@ class UserRepository implements Partial<IRepository<IUser>> {
     );
     return row;
   }
+
+  async delete(id: string) {
+    await query('DELETE FROM users WHERE id = $1', [id]);
+  }
 }
 
 export default new UserRepository();
