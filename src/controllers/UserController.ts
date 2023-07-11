@@ -83,7 +83,7 @@ class UserController {
       return response.status(400).json({ error: 'User not found' });
     }
 
-    const isPasswordCorrect = Hash.comparePasswordWithHas(
+    const isPasswordCorrect = Hash.comparePasswordWithHash(
       currentPassword,
       userFounded.password,
     );

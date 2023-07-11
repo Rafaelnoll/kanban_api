@@ -15,7 +15,7 @@ class Hash {
     return hash;
   }
 
-  comparePasswordWithHas(password: string, hash: string) {
+  comparePasswordWithHash(password: string, hash: string) {
     return bcrypt.compareSync(password, hash);
   }
 }
