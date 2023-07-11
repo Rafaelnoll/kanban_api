@@ -4,6 +4,10 @@ import query from '../database';
 
 type UserWithoutPassword = Omit<IUser, 'password'>;
 
+type NewPasswordObject = {
+  newPassword: string;
+};
+
 class UserRepository implements Partial<IRepository<IUser>> {
   async findAll() {
     return await query('SELECT * FROM users;');
@@ -57,6 +61,17 @@ class UserRepository implements Partial<IRepository<IUser>> {
     );
 
     return row;
+  }
+
+  async changePassword({ newPassword }: NewPasswordObject, id: string) {
+    await query(
+      `
+      UPDATE users
+      SET password = $2
+      WHERE id = $1
+    `,
+      [id, newPassword],
+    );
   }
 }
 

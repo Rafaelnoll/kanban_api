@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-class HashGenetator {
+class Hash {
   private saltRounds: number;
   private secret: string;
 
@@ -18,6 +18,10 @@ class HashGenetator {
 
     return hash;
   }
+
+  comparePasswordWithHas(password: string, hash: string) {
+    return bcrypt.compareSync(password, hash);
+  }
 }
 
-export default new HashGenetator();
+export default new Hash();

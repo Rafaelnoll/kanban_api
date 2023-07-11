@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import HashGenetator from '../utils/HashGenetator';
+import Hash from '../utils/Hash';
 import UserRepository from '../repositories/UserRepository';
 import IUser from '../interfaces/User';
 
@@ -31,7 +31,7 @@ class UserController {
       return response.status(400).json({ error: 'User already exists' });
     }
 
-    const hashOfPassword = HashGenetator.passwordToHash(password);
+    const hashOfPassword = Hash.passwordToHash(password);
 
     await UserRepository.create({
       username,
@@ -71,6 +71,32 @@ class UserController {
 
     await UserRepository.delete(id);
     response.sendStatus(204);
+  }
+
+  async updatePassword(request: Request, response: Response) {
+    const { id } = request.params;
+    const { currentPassword, newPassword } = request.body;
+
+    const userFounded: IUser = await UserRepository.findById(id);
+
+    if (!userFounded) {
+      return response.status(400).json({ error: 'User not found' });
+    }
+
+    const isPasswordCorrect = Hash.comparePasswordWithHas(
+      currentPassword,
+      userFounded.password,
+    );
+
+    if (!isPasswordCorrect) {
+      return response.status(401).json({ error: 'Not Authorized' });
+    }
+
+    await UserRepository.changePassword(
+      { newPassword: Hash.passwordToHash(newPassword) },
+      id,
+    );
+    response.sendStatus(200);
   }
 }
 
