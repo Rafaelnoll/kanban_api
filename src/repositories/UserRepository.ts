@@ -19,6 +19,16 @@ class UserRepository implements Partial<IRepository<IUser>> {
     return row;
   }
 
+  async findById(id: string) {
+    const [row] = await query(
+      `
+      SELECT * FROM users
+      WHERE id = $1`,
+      [id],
+    );
+    return row;
+  }
+
   async create({ username, email, password }: IUser) {
     const [row] = await query(
       `
