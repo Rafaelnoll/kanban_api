@@ -4,6 +4,10 @@ import Hash from '../utils/Hash';
 import UserRepository from '../repositories/UserRepository';
 import IUser from '../interfaces/User';
 
+interface StoreRequest extends IUser {
+  password_confirmation: string;
+}
+
 class UserController {
   async index(request: Request, response: Response) {
     const users = await UserRepository.findAll();
@@ -11,7 +15,8 @@ class UserController {
   }
 
   async store(request: Request, response: Response) {
-    const { username, email, password }: IUser = request.body;
+    const { username, email, password, password_confirmation }: StoreRequest =
+      request.body;
 
     if (!username) {
       return response.status(400).json({ error: 'Username is required' });
@@ -23,6 +28,12 @@ class UserController {
 
     if (!password) {
       return response.status(400).json({ error: 'Password is required' });
+    }
+
+    if (!(password === password_confirmation)) {
+      return response
+        .status(400)
+        .json({ error: 'Password confirmation must be equal to password' });
     }
 
     const userAlreadyExists = await UserRepository.findByEmail(email);
