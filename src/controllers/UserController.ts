@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 
 import Hash from '../utils/Hash';
 import UserRepository from '../repositories/UserRepository';
 import IUser from '../interfaces/User';
+
+const secretKey = process.env.SECRET_KEY as string;
 
 interface StoreRequest extends IUser {
   password_confirmation: string;
@@ -108,6 +111,22 @@ class UserController {
       id,
     );
     response.sendStatus(200);
+  }
+
+  async login(request: Request, response: Response) {
+    const { email, password } = request.body;
+
+    const userFounded: IUser = await UserRepository.findByEmail(email);
+
+    if (
+      email === userFounded.email &&
+      Hash.comparePasswordWithHash(password, userFounded.password)
+    ) {
+      const token = jwt.sign({ email }, secretKey);
+      response.status(200).json({ token });
+    }
+
+    response.status(401).json({ error: 'Invalid credentials' });
   }
 }
 
