@@ -118,6 +118,10 @@ class UserController {
 
     const userFounded: IUser = await UserRepository.findByEmail(email);
 
+    if (!userFounded) {
+      return response.status(404).json({ error: 'User not exists' });
+    }
+
     if (
       email === userFounded.email &&
       Hash.comparePasswordWithHash(password, userFounded.password)
