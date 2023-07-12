@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-const secretKey = process.env.SECRET_KEY as string;
+import IJWTUser from '../interfaces/JWTUser';
 
-interface JWTUser {
-  email: string;
-}
+const secretKey = process.env.SECRET_KEY as string;
 
 function authenticateToken(
   request: Request,
@@ -23,7 +21,7 @@ function authenticateToken(
       return response.status(401).json({ error: 'Invalid credentials' });
     }
 
-    request.user = user as JWTUser;
+    request.user = user as IJWTUser;
     next();
   });
 }

@@ -126,7 +126,7 @@ class UserController {
       email === userFounded.email &&
       Hash.comparePasswordWithHash(password, userFounded.password)
     ) {
-      const token = jwt.sign({ email }, secretKey);
+      const token = jwt.sign({ id: userFounded.id }, secretKey);
       response.status(200).json({ token });
     }
 

@@ -1,11 +1,10 @@
 import { Request } from 'express';
+import IJWTUser from '../interfaces/JWTUser';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: {
-        email: string;
-      };
+      user?: IJWTUser;
     }
   }
 }
