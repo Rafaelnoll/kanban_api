@@ -17,6 +17,22 @@ class UserController {
     response.status(200).json(users);
   }
 
+  async show(request: Request, response: Response) {
+    const { id } = request.params;
+
+    const user: IUser = await UserRepository.findById(id);
+
+    if (!user) {
+      return response.status(404).json({ error: 'User not found!' });
+    }
+
+    response.status(200).json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    });
+  }
+
   async store(request: Request, response: Response) {
     const { username, email, password, password_confirmation }: StoreRequest =
       request.body;
@@ -127,7 +143,7 @@ class UserController {
       Hash.comparePasswordWithHash(password, userFounded.password)
     ) {
       const token = jwt.sign({ id: userFounded.id }, secretKey);
-      response.status(200).json({ token });
+      response.status(200).json({ token, userId: userFounded.id });
     }
 
     response.status(401).json({ error: 'Invalid credentials' });
