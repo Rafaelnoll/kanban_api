@@ -79,13 +79,14 @@ class UserController {
   }
 
   async update(request: Request, response: Response) {
-    const { username, email } = request.body;
+    const { username, email, description } = request.body;
     const { id } = request.params;
 
     const userUpdated: IUser = await UserRepository.update(
       {
         email,
         username,
+        description,
       },
       id,
     );
@@ -97,6 +98,7 @@ class UserController {
     const filtredUserFields = {
       username: userUpdated.username,
       email: userUpdated.email,
+      description: userUpdated.description,
     };
 
     response.status(201).json(filtredUserFields);

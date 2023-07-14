@@ -59,15 +59,18 @@ class UserRepository implements Partial<IRepository<IUser>> {
     await query('DELETE FROM users WHERE id = $1', [id]);
   }
 
-  async update({ username, email }: UserWithoutPassword, id: string) {
+  async update(
+    { username, email, description }: UserWithoutPassword,
+    id: string,
+  ) {
     const [row] = await query(
       `
       UPDATE users
-      SET username = $2, email = $3
+      SET username = $2, email = $3, description = $4
       WHERE id = $1
       RETURNING *
       `,
-      [id, username, email],
+      [id, username, email, description],
     );
 
     return row;
