@@ -19,8 +19,9 @@ CREATE TABLE IF NOT EXISTS tasks(
 
 CREATE TABLE IF NOT EXISTS users(
   id UUID NOT NULL UNIQUE DEFAULT uuid_generate_V4(),
-  username VARCHAR NOT NULL,
+  username VARCHAR NOT NULL UNIQUE,
   email VARCHAR NOT NULL UNIQUE,
+  description VARCHAR,
   password VARCHAR NOT NULL,
   PRIMARY KEY (id)
 );
