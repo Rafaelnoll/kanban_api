@@ -30,6 +30,7 @@ class UserController {
       id: user.id,
       username: user.username,
       email: user.email,
+      description: user.description,
     });
   }
 
@@ -96,6 +97,7 @@ class UserController {
     }
 
     const filtredUserFields = {
+      id: userUpdated.id,
       username: userUpdated.username,
       email: userUpdated.email,
       description: userUpdated.description,
