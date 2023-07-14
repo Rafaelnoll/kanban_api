@@ -23,6 +23,16 @@ class UserRepository implements Partial<IRepository<IUser>> {
     return row;
   }
 
+  async findByUsername(username: string) {
+    const [row] = await query(
+      `
+      SELECT * FROM users
+      WHERE username = $1`,
+      [username],
+    );
+    return row;
+  }
+
   async findById(id: string) {
     const [row] = await query(
       `

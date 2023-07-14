@@ -61,6 +61,12 @@ class UserController {
       return response.status(400).json({ error: 'User already exists' });
     }
 
+    const usernameInUse = await UserRepository.findByUsername(username);
+
+    if (usernameInUse) {
+      return response.status(400).json({ error: 'Username already in use' });
+    }
+
     const hashOfPassword = Hash.passwordToHash(password);
 
     await UserRepository.create({
