@@ -36,16 +36,23 @@ class TasksRepository implements IRepository<ITask> {
     description,
     status = 'DO',
     category_id = null,
+    user_id,
   }: ITask) {
     const [row] = await query(
       `
-      INSERT INTO tasks(title, description, status, category_id)
-      VALUES($1, $2, $3, $4)
+      INSERT INTO tasks(title, description, status, category_id, user_id)
+      VALUES($1, $2, $3, $4, $5)
       RETURNING tasks.* , (
         SELECT name FROM categories WHERE categories.id = tasks.category_id
       ) AS category_name;
     `,
-      [title, description, status, category_id === null ? null : category_id],
+      [
+        title,
+        description,
+        status,
+        category_id === null ? null : category_id,
+        user_id,
+      ],
     );
     return row;
   }

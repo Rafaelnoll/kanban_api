@@ -21,6 +21,7 @@ class TaskController {
 
   async store(request: Request, response: Response) {
     const { title, description, status, category_id } = request.body;
+    const user = request.user;
 
     if (!title) {
       return response.status(400).json({ error: 'Task title is required' });
@@ -37,6 +38,7 @@ class TaskController {
       description,
       status,
       category_id,
+      user_id: user?.id,
     });
     response.status(201).json(taskCreated);
   }
@@ -44,6 +46,7 @@ class TaskController {
   async update(request: Request, response: Response) {
     const { title, description, status, category_id } = request.body;
     const { id } = request.params;
+    const user = request.user;
 
     const taskUpdated = await TasksRepository.update(
       {
@@ -51,6 +54,7 @@ class TaskController {
         description,
         status,
         category_id,
+        user_id: user.id,
       },
       id,
     );

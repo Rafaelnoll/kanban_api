@@ -1,5 +1,6 @@
 import express from 'express';
 import TaskController from '../controllers/TaskController';
+import authenticateToken from '../middlewares/authenticateToken';
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router.get('/tasks/:id', TaskController.show);
 router.get('/tasks', TaskController.index);
 
 // POST
-router.post('/tasks', TaskController.store);
+router.post('/tasks', authenticateToken, TaskController.store);
 
 // PUT
 router.put('/tasks/:id', TaskController.update);
