@@ -13,7 +13,7 @@ router.get('/tasks', TaskController.index);
 router.post('/tasks', authenticateToken, TaskController.store);
 
 // PUT
-router.put('/tasks/:id', TaskController.update);
+router.put('/tasks/:id', authenticateToken, TaskController.update);
 
 // Delete
 router.delete('/tasks/:id', TaskController.delete);
