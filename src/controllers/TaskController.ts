@@ -3,7 +3,9 @@ import TasksRepository from '../repositories/TasksRepository';
 
 class TaskController {
   async index(request: Request, response: Response) {
-    const tasks = await TasksRepository.findAll();
+    const user = request.user;
+
+    const tasks = await TasksRepository.findAll(user.id);
     response.status(200).json(tasks);
   }
 

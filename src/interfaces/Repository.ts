@@ -1,5 +1,5 @@
 export default interface Repository<Type> {
-  findAll: () => Promise<Type[]>;
+  findAll: (user_id: string) => Promise<Type[]>;
   findById: (id: string) => Promise<Type>;
   create: (object: Type) => Promise<Type>;
   update: (object: Type, id: string) => Promise<Type>;
