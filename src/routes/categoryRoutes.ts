@@ -10,7 +10,7 @@ router.get('/categories/:id', authenticateToken, CategoryController.show);
 router.get('/categories', authenticateToken, CategoryController.index);
 
 // POST
-router.post('/categories', CategoryController.store);
+router.post('/categories', authenticateToken, CategoryController.store);
 
 // PUT
 router.put('/categories/:id', CategoryController.update);

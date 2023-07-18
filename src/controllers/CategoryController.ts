@@ -26,12 +26,13 @@ class CategoryController implements IController {
 
   async store(request: Request, response: Response) {
     const { name } = request.body;
+    const user = request.user;
 
     if (!name) {
       return response.status(400).json({ error: 'name is required!' });
     }
 
-    const category = await CategoriesRepository.create({ name });
+    const category = await CategoriesRepository.create({ name }, user.id);
     response.status(201).json(category);
   }
 

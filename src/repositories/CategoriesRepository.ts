@@ -24,14 +24,14 @@ class CategoriesRepository implements Repository<ICategory> {
     return row;
   }
 
-  async create({ name }: ICategory) {
+  async create({ name }: ICategory, user_id: string) {
     const [row] = await query(
       `
-      INSERT INTO categories(name)
-      VALUES ($1)
+      INSERT INTO categories(name, user_id)
+      VALUES ($1, $2)
       RETURNING *
     `,
-      [name],
+      [name, user_id],
     );
 
     return row;
