@@ -7,7 +7,7 @@ class TasksRepository implements IRepository<ITask> {
       `
       SELECT tasks.*, categories.name as category_name FROM tasks
       LEFT JOIN categories ON categories.id = category_id
-      WHERE user_id = $1
+      WHERE tasks.user_id = $1
     `,
       [user_id],
     );
