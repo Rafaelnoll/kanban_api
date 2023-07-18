@@ -56,7 +56,9 @@ class CategoryController implements IController {
 
   async delete(request: Request, response: Response) {
     const { id } = request.params;
-    await CategoriesRepository.delete(id);
+    const user = request.user;
+
+    await CategoriesRepository.delete(id, user.id);
 
     response.sendStatus(204);
   }

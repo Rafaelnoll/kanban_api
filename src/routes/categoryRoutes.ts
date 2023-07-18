@@ -16,6 +16,6 @@ router.post('/categories', authenticateToken, CategoryController.store);
 router.put('/categories/:id', authenticateToken, CategoryController.update);
 
 // Delete
-router.delete('/categories/:id', CategoryController.delete);
+router.delete('/categories/:id', authenticateToken, CategoryController.delete);
 
 export default router;

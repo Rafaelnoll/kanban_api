@@ -50,8 +50,11 @@ class CategoriesRepository implements Repository<ICategory> {
     return row;
   }
 
-  async delete(id: string) {
-    await query(`DELETE FROM categories WHERE id = $1`, [id]);
+  async delete(id: string, user_id: string) {
+    await query(`DELETE FROM categories WHERE id = $1 AND user_id = $2`, [
+      id,
+      user_id,
+    ]);
   }
 }
 
