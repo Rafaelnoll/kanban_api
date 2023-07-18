@@ -32,6 +32,12 @@ class CategoryController implements IController {
       return response.status(400).json({ error: 'name is required!' });
     }
 
+    const categoryExists = await CategoriesRepository.findByName(name, user.id);
+
+    if (categoryExists) {
+      return response.status(400).json({ error: 'Category already exists!' });
+    }
+
     const category = await CategoriesRepository.create({ name }, user.id);
     response.status(201).json(category);
   }
