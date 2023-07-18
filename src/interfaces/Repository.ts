@@ -3,5 +3,5 @@ export default interface Repository<Type> {
   findById: (id: string) => Promise<Type>;
   create: (object: Type) => Promise<Type>;
   update: (object: Type, id: string) => Promise<Type>;
-  delete: (id: string) => Promise<void>;
+  delete: (id: string, user_id: string) => Promise<void>;
 }

@@ -87,8 +87,14 @@ class TasksRepository implements IRepository<ITask> {
     return row;
   }
 
-  async delete(id: string) {
-    await query('DELETE FROM tasks WHERE id = $1', [id]);
+  async delete(id: string, user_id: string) {
+    await query(
+      `
+      DELETE FROM tasks
+      WHERE id = $1 AND user_id = $2
+    `,
+      [id, user_id],
+    );
   }
 }
 

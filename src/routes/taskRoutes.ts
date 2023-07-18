@@ -16,6 +16,6 @@ router.post('/tasks', authenticateToken, TaskController.store);
 router.put('/tasks/:id', authenticateToken, TaskController.update);
 
 // Delete
-router.delete('/tasks/:id', TaskController.delete);
+router.delete('/tasks/:id', authenticateToken, TaskController.delete);
 
 export default router;

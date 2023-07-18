@@ -70,8 +70,9 @@ class TaskController {
 
   async delete(request: Request, response: Response) {
     const { id } = request.params;
+    const user = request.user;
 
-    await TasksRepository.delete(id);
+    await TasksRepository.delete(id, user.id);
     response.sendStatus(204);
   }
 
