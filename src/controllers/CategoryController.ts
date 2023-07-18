@@ -39,12 +39,13 @@ class CategoryController implements IController {
   async update(request: Request, response: Response) {
     const { name } = request.body;
     const { id } = request.params;
+    const user = request.user;
 
     if (!name) {
       return response.status(400).json({ error: 'name is required!' });
     }
 
-    const category = await CategoriesRepository.update({ name }, id);
+    const category = await CategoriesRepository.update({ name }, id, user.id);
 
     if (!category) {
       return response.status(404).json({ error: 'Category not found.' });

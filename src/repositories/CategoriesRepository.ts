@@ -37,15 +37,15 @@ class CategoriesRepository implements Repository<ICategory> {
     return row;
   }
 
-  async update({ name }: ICategory, id: string) {
+  async update({ name }: ICategory, id: string, user_id: string) {
     const [row] = await query(
       `
       UPDATE categories
-      SET name = $2
-      WHERE id = $1
+      SET name = $3
+      WHERE id = $1 AND user_id = $2
       RETURNING *
     `,
-      [id, name],
+      [id, user_id, name],
     );
     return row;
   }

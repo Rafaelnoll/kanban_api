@@ -13,7 +13,7 @@ router.get('/categories', authenticateToken, CategoryController.index);
 router.post('/categories', authenticateToken, CategoryController.store);
 
 // PUT
-router.put('/categories/:id', CategoryController.update);
+router.put('/categories/:id', authenticateToken, CategoryController.update);
 
 // Delete
 router.delete('/categories/:id', CategoryController.delete);
