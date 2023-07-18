@@ -3,13 +3,17 @@ import Repository from '../interfaces/Repository';
 import ICategory from '../interfaces/Category';
 
 class CategoriesRepository implements Repository<ICategory> {
-  async findAll() {
-    return await query(`
+  async findAll(user_id: string) {
+    return await query(
+      `
       SELECT categories.*, COUNT(tasks.id) as tasks_count
       FROM categories
       LEFT JOIN tasks ON tasks.category_id = categories.id
+      WHERE categories.user_id = $1
       GROUP BY categories.id, categories.name;
-    `);
+    `,
+      [user_id],
+    );
   }
 
   async findById(id: string) {

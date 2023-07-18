@@ -5,7 +5,9 @@ import IController from '../interfaces/Controller';
 
 class CategoryController implements IController {
   async index(request: Request, response: Response) {
-    const categories = await CategoriesRepository.findAll();
+    const user = request.user;
+
+    const categories = await CategoriesRepository.findAll(user.id);
     response.status(200).json(categories);
   }
 
