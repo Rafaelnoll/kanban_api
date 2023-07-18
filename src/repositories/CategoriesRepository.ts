@@ -16,8 +16,11 @@ class CategoriesRepository implements Repository<ICategory> {
     );
   }
 
-  async findById(id: string) {
-    const [row] = await query('SELECT * FROM categories WHERE id = $1;', [id]);
+  async findById(id: string, user_id: string) {
+    const [row] = await query(
+      'SELECT * FROM categories WHERE id = $1 AND user_id = $2;',
+      [id, user_id],
+    );
     return row;
   }
 

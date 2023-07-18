@@ -6,7 +6,7 @@ import authenticateToken from '../middlewares/authenticateToken';
 const router = Router();
 
 // GET
-router.get('/categories/:id', CategoryController.show);
+router.get('/categories/:id', authenticateToken, CategoryController.show);
 router.get('/categories', authenticateToken, CategoryController.index);
 
 // POST

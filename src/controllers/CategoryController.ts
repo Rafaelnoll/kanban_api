@@ -13,8 +13,9 @@ class CategoryController implements IController {
 
   async show(request: Request, response: Response) {
     const { id } = request.params;
+    const user = request.user;
 
-    const category = await CategoriesRepository.findById(id);
+    const category = await CategoriesRepository.findById(id, user.id);
 
     if (!category) {
       return response.status(404).json({ error: 'category not found' });
