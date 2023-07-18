@@ -6,7 +6,7 @@ const router = express.Router();
 
 // GET
 router.get('/tasks/category/:category_id', TaskController.listAllByCategory);
-router.get('/tasks/:id', TaskController.show);
+router.get('/tasks/:id', authenticateToken, TaskController.show);
 router.get('/tasks', authenticateToken, TaskController.index);
 
 // POST

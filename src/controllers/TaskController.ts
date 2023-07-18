@@ -11,8 +11,9 @@ class TaskController {
 
   async show(request: Request, response: Response) {
     const { id } = request.params;
+    const user = request.user;
 
-    const task = await TasksRepository.findById(id);
+    const task = await TasksRepository.findById(id, user.id);
 
     if (!task) {
       return response.status(404).json({ error: 'Task not found!' });

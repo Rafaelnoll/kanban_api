@@ -13,13 +13,13 @@ class TasksRepository implements IRepository<ITask> {
     );
   }
 
-  async findById(id: string) {
+  async findById(id: string, user_id: string) {
     const [row] = await query(
       `
       SELECT tasks.*, categories.name as category_name FROM tasks
       LEFT JOIN categories ON categories.id = category_id
-      WHERE tasks.id = $1`,
-      [id],
+      WHERE tasks.id = $1 AND tasks.user_id = $2`,
+      [id, user_id],
     );
     return row;
   }
