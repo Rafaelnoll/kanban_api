@@ -16,7 +16,7 @@ class TaskController {
     const task = await TasksRepository.findById(id, user.id);
 
     if (!task) {
-      return response.status(404).json({ error: 'Task not found!' });
+      return response.status(404).json({ error: 'Tarefa não encontrada!' });
     }
 
     response.status(200).json(task);
@@ -27,13 +27,15 @@ class TaskController {
     const user = request.user;
 
     if (!title) {
-      return response.status(400).json({ error: 'Task title is required' });
+      return response
+        .status(400)
+        .json({ error: 'O título da tarefa é obrigatório!' });
     }
 
     if (status && !['DO', 'DOING', 'DONE'].includes(status)) {
       return response
         .status(400)
-        .json({ error: "Field status must be 'DO', 'DONE' or 'DOING'" });
+        .json({ error: "O campo de status deve ser 'DO', 'DONE' ou 'DOING'" });
     }
 
     const taskCreated = await TasksRepository.create({
@@ -63,7 +65,7 @@ class TaskController {
     );
 
     if (!taskUpdated) {
-      return response.status(404).json({ error: 'Task not found!' });
+      return response.status(404).json({ error: 'Tarefa não encontrada!' });
     }
 
     response.status(201).json(taskUpdated);
@@ -83,7 +85,7 @@ class TaskController {
     const tasks = await TasksRepository.findAllByCategory(category_id);
 
     if (tasks.length === 0) {
-      return response.status(404).json({ error: 'Tasks not found' });
+      return response.status(404).json({ error: 'Tarefa não encontrada!' });
     }
 
     response.status(200).json(tasks);

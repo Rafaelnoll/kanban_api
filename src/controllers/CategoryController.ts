@@ -18,7 +18,7 @@ class CategoryController implements IController {
     const category = await CategoriesRepository.findById(id, user.id);
 
     if (!category) {
-      return response.status(404).json({ error: 'category not found' });
+      return response.status(404).json({ error: 'Categoria não encontrada!' });
     }
 
     response.status(201).json(category);
@@ -29,13 +29,13 @@ class CategoryController implements IController {
     const user = request.user;
 
     if (!name) {
-      return response.status(400).json({ error: 'name is required!' });
+      return response.status(400).json({ error: 'Nome é obrigatório!' });
     }
 
     const categoryExists = await CategoriesRepository.findByName(name, user.id);
 
     if (categoryExists) {
-      return response.status(400).json({ error: 'Category already exists!' });
+      return response.status(400).json({ error: 'Categoria já existe!' });
     }
 
     const category = await CategoriesRepository.create({ name }, user.id);
@@ -48,13 +48,13 @@ class CategoryController implements IController {
     const user = request.user;
 
     if (!name) {
-      return response.status(400).json({ error: 'name is required!' });
+      return response.status(400).json({ error: 'Nome é obrigatório!' });
     }
 
     const category = await CategoriesRepository.update({ name }, id, user.id);
 
     if (!category) {
-      return response.status(404).json({ error: 'Category not found.' });
+      return response.status(404).json({ error: 'Categoria não encontrada!' });
     }
 
     response.status(201).json(category);

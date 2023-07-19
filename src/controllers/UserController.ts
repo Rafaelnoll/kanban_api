@@ -23,7 +23,7 @@ class UserController {
     const user: IUser = await UserRepository.findById(id);
 
     if (!user) {
-      return response.status(404).json({ error: 'User not found!' });
+      return response.status(404).json({ error: 'Usuário não encontrado!' });
     }
 
     response.status(200).json({
@@ -39,33 +39,33 @@ class UserController {
       request.body;
 
     if (!username) {
-      return response.status(400).json({ error: 'Username is required' });
+      return response.status(400).json({ error: 'Username é obrigatório!' });
     }
 
     if (!email) {
-      return response.status(400).json({ error: 'Email is required' });
+      return response.status(400).json({ error: 'E-mail é obrigatório!' });
     }
 
     if (!password) {
-      return response.status(400).json({ error: 'Password is required' });
+      return response.status(400).json({ error: 'Senha é obrigatória!' });
     }
 
     if (!(password === password_confirmation)) {
       return response
         .status(400)
-        .json({ error: 'Password confirmation must be equal to password' });
+        .json({ error: 'A confirmação da senha deve ser igual à senha!' });
     }
 
     const userAlreadyExists = await UserRepository.findByEmail(email);
 
     if (userAlreadyExists) {
-      return response.status(400).json({ error: 'User already exists' });
+      return response.status(400).json({ error: 'Usuário já existe!' });
     }
 
     const usernameInUse = await UserRepository.findByUsername(username);
 
     if (usernameInUse) {
-      return response.status(400).json({ error: 'Username already in use' });
+      return response.status(400).json({ error: 'Nome de usuário já em uso!' });
     }
 
     const hashOfPassword = Hash.passwordToHash(password);
@@ -93,7 +93,7 @@ class UserController {
     );
 
     if (!userUpdated) {
-      return response.status(404).json({ error: 'User not found!' });
+      return response.status(404).json({ error: 'Usuário não encontrado!' });
     }
 
     const filtredUserFields = {
@@ -120,7 +120,7 @@ class UserController {
     const userFounded: IUser = await UserRepository.findById(id);
 
     if (!userFounded) {
-      return response.status(400).json({ error: 'User not found' });
+      return response.status(400).json({ error: 'Usuário não encontrado!' });
     }
 
     const isPasswordCorrect = Hash.comparePasswordWithHash(
@@ -129,7 +129,7 @@ class UserController {
     );
 
     if (!isPasswordCorrect) {
-      return response.status(401).json({ error: 'Not Authorized' });
+      return response.status(401).json({ error: 'Não autorizado!' });
     }
 
     await UserRepository.changePassword(
@@ -145,7 +145,7 @@ class UserController {
     const userFounded: IUser = await UserRepository.findByEmail(email);
 
     if (!userFounded) {
-      return response.status(404).json({ error: 'User not exists' });
+      return response.status(404).json({ error: 'Usuário não existe!' });
     }
 
     if (
@@ -156,7 +156,7 @@ class UserController {
       response.status(200).json({ token, userId: userFounded.id });
     }
 
-    response.status(401).json({ error: 'Invalid credentials' });
+    response.status(401).json({ error: 'Credenciais inválidas!' });
   }
 }
 
