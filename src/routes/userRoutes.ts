@@ -3,6 +3,7 @@ import { Router } from 'express';
 import UserController from '../controllers/UserController';
 import authenticateToken from '../middlewares/authenticateToken';
 import verifyUser from '../middlewares/verifyUser';
+import upload from '../utils/upload';
 
 const router = Router();
 
@@ -21,6 +22,13 @@ router.put(
   authenticateToken,
   verifyUser,
   UserController.updatePassword,
+);
+router.put(
+  '/users/:id/change-picture',
+  authenticateToken,
+  verifyUser,
+  upload.single('file'),
+  UserController.changeProfilePicture,
 );
 
 // Delete

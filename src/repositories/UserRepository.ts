@@ -8,6 +8,10 @@ type NewPasswordObject = {
   newPassword: string;
 };
 
+type NewProfileImageObject = {
+  imagePath: string;
+};
+
 class UserRepository implements Partial<IRepository<IUser>> {
   async findAll() {
     return await query('SELECT * FROM users;');
@@ -68,7 +72,7 @@ class UserRepository implements Partial<IRepository<IUser>> {
       UPDATE users
       SET username = $2, email = $3, description = $4
       WHERE id = $1
-      RETURNING *
+      RETURNING id,username,email,description,image_path
       `,
       [id, username, email, description],
     );
@@ -85,6 +89,20 @@ class UserRepository implements Partial<IRepository<IUser>> {
     `,
       [id, newPassword],
     );
+  }
+
+  async changeProfileImage({ imagePath }: NewProfileImageObject, id: string) {
+    const [row] = await query(
+      `
+      UPDATE users
+      SET image_path = $2
+      WHERE id = $1
+      RETURNING id,username,email,description,image_path
+    `,
+      [id, imagePath],
+    );
+
+    return row;
   }
 }
 

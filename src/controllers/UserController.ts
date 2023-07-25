@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import Hash from '../utils/Hash';
 import UserRepository from '../repositories/UserRepository';
 import IUser from '../interfaces/User';
+import { deleteOldProfileImage } from '../utils/upload';
 
 const secretKey = process.env.SECRET_KEY as string;
 
@@ -96,14 +97,7 @@ class UserController {
       return response.status(404).json({ error: 'Usuário não encontrado!' });
     }
 
-    const filtredUserFields = {
-      id: userUpdated.id,
-      username: userUpdated.username,
-      email: userUpdated.email,
-      description: userUpdated.description,
-    };
-
-    response.status(201).json(filtredUserFields);
+    response.status(201).json(userUpdated);
   }
 
   async delete(request: Request, response: Response) {
@@ -157,6 +151,28 @@ class UserController {
     }
 
     response.status(401).json({ error: 'Credenciais inválidas!' });
+  }
+
+  async changeProfilePicture(request: Request, response: Response) {
+    const file = request.file;
+    const user = request.user;
+
+    if (!file) {
+      return response.status(400).json({ error: 'Imagem é obrigatória' });
+    }
+
+    const userFounded: IUser = await UserRepository.findById(user.id);
+
+    if (userFounded.image_path) {
+      deleteOldProfileImage(userFounded.image_path);
+    }
+
+    const userWithNewImageProfile = await UserRepository.changeProfileImage(
+      { imagePath: file?.filename },
+      user.id,
+    );
+
+    response.status(200).json(userWithNewImageProfile);
   }
 }
 

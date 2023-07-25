@@ -4,4 +4,5 @@ export default interface IUser {
   email: string;
   description?: string;
   password: string;
+  image_path?: string | null;
 }

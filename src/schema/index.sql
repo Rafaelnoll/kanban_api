@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users(
   email VARCHAR NOT NULL UNIQUE,
   description VARCHAR,
   password VARCHAR NOT NULL,
+  image_path VARCHAR,
   PRIMARY KEY (id)
 );
 
