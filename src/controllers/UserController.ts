@@ -27,12 +27,7 @@ class UserController {
       return response.status(404).json({ error: 'Usuário não encontrado!' });
     }
 
-    response.status(200).json({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      description: user.description,
-    });
+    response.status(200).json(user);
   }
 
   async store(request: Request, response: Response) {
