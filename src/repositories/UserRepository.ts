@@ -40,7 +40,7 @@ class UserRepository implements Partial<IRepository<IUser>> {
   async findById(id: string) {
     const [row] = await query(
       `
-      SELECT id, username, email, description, image_path FROM users
+      SELECT * FROM users
       WHERE id = $1;
       `,
       [id],

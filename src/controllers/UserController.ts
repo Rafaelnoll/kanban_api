@@ -27,7 +27,15 @@ class UserController {
       return response.status(404).json({ error: 'Usuário não encontrado!' });
     }
 
-    response.status(200).json(user);
+    const filtredUserFields = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      description: user.description,
+      image_path: user.image_path,
+    };
+
+    response.status(200).json(filtredUserFields);
   }
 
   async store(request: Request, response: Response) {
@@ -104,7 +112,7 @@ class UserController {
 
   async updatePassword(request: Request, response: Response) {
     const { id } = request.params;
-    const { currentPassword, newPassword } = request.body;
+    const { current_password, new_password } = request.body;
 
     const userFounded: IUser = await UserRepository.findById(id);
 
@@ -113,7 +121,7 @@ class UserController {
     }
 
     const isPasswordCorrect = Hash.comparePasswordWithHash(
-      currentPassword,
+      current_password,
       userFounded.password,
     );
 
@@ -122,7 +130,7 @@ class UserController {
     }
 
     await UserRepository.changePassword(
-      { newPassword: Hash.passwordToHash(newPassword) },
+      { newPassword: Hash.passwordToHash(new_password) },
       id,
     );
     response.sendStatus(200);
