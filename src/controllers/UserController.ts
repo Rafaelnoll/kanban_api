@@ -5,6 +5,7 @@ import Hash from '../utils/Hash';
 import UserRepository from '../repositories/UserRepository';
 import IUser from '../interfaces/User';
 import { deleteOldProfileImage } from '../utils/upload';
+import Password from '../utils/Password';
 
 const secretKey = process.env.SECRET_KEY as string;
 
@@ -54,7 +55,7 @@ class UserController {
       return response.status(400).json({ error: 'Senha é obrigatória!' });
     }
 
-    if (!(password === password_confirmation)) {
+    if (!Password.comparePasswords(password, password_confirmation)) {
       return response
         .status(400)
         .json({ error: 'A confirmação da senha deve ser igual à senha!' });
@@ -114,10 +115,14 @@ class UserController {
     const { id } = request.params;
     const { current_password, new_password } = request.body;
 
+    if (!Password.validatePasswordWithRegex(new_password)) {
+      return response.status(400).json({ error: 'Senha inválida!' });
+    }
+
     const userFounded: IUser = await UserRepository.findById(id);
 
     if (!userFounded) {
-      return response.status(400).json({ error: 'Usuário não encontrado!' });
+      return response.status(404).json({ error: 'Usuário não encontrado!' });
     }
 
     const isPasswordCorrect = Hash.comparePasswordWithHash(
