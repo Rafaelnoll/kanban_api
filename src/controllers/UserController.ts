@@ -6,6 +6,7 @@ import UserRepository from '../repositories/UserRepository';
 import IUser from '../interfaces/User';
 import { deleteOldProfileImage } from '../utils/upload';
 import Password from '../utils/Password';
+import { sendResetPasswordEmail } from '../utils/sendResetPasswordEmail';
 
 const secretKey = process.env.SECRET_KEY as string;
 
@@ -181,6 +182,30 @@ class UserController {
     );
 
     response.status(200).json(userWithNewImageProfile);
+  }
+
+  async sendEmailToResetPassword(request: Request, response: Response) {
+    const { email } = request.body;
+
+    const userFound = (await UserRepository.findByEmail(email)) as IUser;
+
+    if (!userFound) {
+      return response.status(404).json({ error: 'E-mail não encontrado!' });
+    }
+
+    const userToken = jwt.sign({ id: userFound.id }, secretKey);
+
+    const emailSended = await sendResetPasswordEmail({
+      emailTo: email,
+      username: userFound.username,
+      url_reset_password: `http://localhost:8080/reset-password?token=${userToken}`,
+    });
+
+    if (emailSended) {
+      return response.status(200).json({ msg: 'E-mail enviado com sucesso!' });
+    }
+
+    response.sendStatus(500);
   }
 }
 
