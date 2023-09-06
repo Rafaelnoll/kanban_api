@@ -9,6 +9,7 @@ import Password from '../utils/Password';
 import { sendResetPasswordEmail } from '../utils/sendResetPasswordEmail';
 
 const secretKey = process.env.SECRET_KEY as string;
+const resetPasswordSecretKey = process.env.RESET_PASSWORD_SECRET_KEY as string;
 
 interface StoreRequest extends IUser {
   password_confirmation: string;
@@ -203,7 +204,7 @@ class UserController {
       return response.status(404).json({ error: 'E-mail não encontrado!' });
     }
 
-    const userToken = jwt.sign({ id: userFound.id }, secretKey);
+    const userToken = jwt.sign({ id: userFound.id }, resetPasswordSecretKey);
 
     const emailSended = await sendResetPasswordEmail({
       emailTo: email,
@@ -236,7 +237,7 @@ class UserController {
       return response.status(401).json({ error: 'Token é obrigatório!' });
     }
 
-    const validToken = jwt.verify(token, secretKey) as JwtPayload;
+    const validToken = jwt.verify(token, resetPasswordSecretKey) as JwtPayload;
 
     if (!validToken) {
       return response
