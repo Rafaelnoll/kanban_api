@@ -167,7 +167,7 @@ class UserController {
       Hash.comparePasswordWithHash(password, userFounded.password)
     ) {
       const token = jwt.sign({ id: userFounded.id }, secretKey);
-      response.status(200).json({ token, userId: userFounded.id });
+      return response.status(200).json({ token, userId: userFounded.id });
     }
 
     response.status(401).json({ error: 'Credenciais inválidas!' });
