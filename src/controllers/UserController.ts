@@ -14,6 +14,16 @@ interface StoreRequest extends IUser {
   password_confirmation: string;
 }
 
+interface JwtPayload {
+  id: string;
+}
+
+interface ResetUserRequest {
+  new_password: string;
+  new_password_confirmation: string;
+  token: string;
+}
+
 class UserController {
   async index(request: Request, response: Response) {
     const users = await UserRepository.findAll();
@@ -206,6 +216,42 @@ class UserController {
     }
 
     response.sendStatus(500);
+  }
+
+  async resetUserPassword(request: Request, response: Response) {
+    const { new_password, new_password_confirmation, token }: ResetUserRequest =
+      request.body;
+
+    if (!new_password || !new_password_confirmation) {
+      return response.status(400).json({ error: 'Senha é obrigatória!' });
+    }
+
+    if (!(new_password === new_password_confirmation)) {
+      return response
+        .status(400)
+        .json({ error: 'As senhas devem ser iguais!' });
+    }
+
+    if (!token) {
+      return response.status(401).json({ error: 'Token é obrigatório!' });
+    }
+
+    const validToken = jwt.verify(token, secretKey) as JwtPayload;
+
+    if (!validToken) {
+      return response
+        .status(401)
+        .json({ error: 'Essa ação não foi autorizada!' });
+    }
+
+    const passwordHash = Hash.passwordToHash(new_password);
+
+    await UserRepository.changePassword(
+      { newPassword: passwordHash },
+      validToken.id,
+    );
+
+    response.status(200).json({ msg: 'Senha alterada com sucesso!' });
   }
 }
 

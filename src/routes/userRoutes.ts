@@ -17,6 +17,8 @@ router.post('/users/login', UserController.login);
 router.post('/users/forgot-password', UserController.sendEmailToResetPassword);
 
 // PUT
+
+router.put('/users/reset-password', UserController.resetUserPassword);
 router.put('/users/:id', authenticateToken, verifyUser, UserController.update);
 router.put(
   '/users/:id/change-password',
