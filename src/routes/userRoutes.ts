@@ -8,7 +8,6 @@ import upload from '../utils/upload';
 const router = Router();
 
 // GET
-router.get('/users', UserController.index);
 router.get('/users/:id', authenticateToken, verifyUser, UserController.show);
 
 // POST
