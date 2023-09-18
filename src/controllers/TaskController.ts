@@ -81,8 +81,16 @@ class TaskController {
 
   async listAllByCategory(request: Request, response: Response) {
     const { category_id } = request.params;
+    const user = request.user;
 
-    const tasks = await TasksRepository.findAllByCategory(category_id);
+    if (!user) {
+      return response.status(401).json({ error: 'Não autorizado!' });
+    }
+
+    const tasks = await TasksRepository.findAllByCategory({
+      category_id,
+      user_id: user.id,
+    });
 
     if (tasks.length === 0) {
       return response.status(404).json({ error: 'Tarefa não encontrada!' });

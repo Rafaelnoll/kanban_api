@@ -5,7 +5,11 @@ import authenticateToken from '../middlewares/authenticateToken';
 const router = express.Router();
 
 // GET
-router.get('/tasks/category/:category_id', TaskController.listAllByCategory);
+router.get(
+  '/tasks/category/:category_id',
+  authenticateToken,
+  TaskController.listAllByCategory,
+);
 router.get('/tasks/:id', authenticateToken, TaskController.show);
 router.get('/tasks', authenticateToken, TaskController.index);
 

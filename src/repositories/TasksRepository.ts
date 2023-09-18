@@ -1,6 +1,12 @@
 import IRepository from '../interfaces/Repository';
 import ITask from '../interfaces/Task';
 import query from '../database';
+
+interface FindAllByCategoryProps {
+  category_id: string;
+  user_id: string;
+}
+
 class TasksRepository implements IRepository<ITask> {
   async findAll(user_id: string) {
     return await query(
@@ -24,13 +30,13 @@ class TasksRepository implements IRepository<ITask> {
     return row;
   }
 
-  async findAllByCategory(category_id: string) {
+  async findAllByCategory({ category_id, user_id }: FindAllByCategoryProps) {
     const tasks = await query(
       `
       SELECT tasks.*, categories.name as category_name FROM tasks
       LEFT JOIN categories ON categories.id = category_id
-      WHERE tasks.category_id = $1`,
-      [category_id],
+      WHERE tasks.category_id = $1 AND categories.user_id = $2`,
+      [category_id, user_id],
     );
     return tasks;
   }
