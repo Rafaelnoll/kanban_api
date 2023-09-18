@@ -4,6 +4,7 @@ import UserController from '../controllers/UserController';
 import authenticateToken from '../middlewares/authenticateToken';
 import verifyUser from '../middlewares/verifyUser';
 import upload from '../utils/upload';
+import requestLimiter from '../middlewares/requestLimiter';
 
 const router = Router();
 
@@ -11,13 +12,21 @@ const router = Router();
 router.get('/users/:id', authenticateToken, verifyUser, UserController.show);
 
 // POST
-router.post('/users', UserController.store);
+router.post('/users', requestLimiter(100), UserController.store);
 router.post('/users/login', UserController.login);
-router.post('/users/forgot-password', UserController.sendEmailToResetPassword);
+router.post(
+  '/users/forgot-password',
+  requestLimiter(5),
+  UserController.sendEmailToResetPassword,
+);
 
 // PUT
 
-router.put('/users/reset-password', UserController.resetUserPassword);
+router.put(
+  '/users/reset-password',
+  requestLimiter(10),
+  UserController.resetUserPassword,
+);
 router.put('/users/:id', authenticateToken, verifyUser, UserController.update);
 router.put(
   '/users/:id/change-password',
