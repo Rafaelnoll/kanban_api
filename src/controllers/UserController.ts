@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import Hash from '../utils/Hash';
 import UserRepository from '../repositories/UserRepository';
+import ResetTokenRepository from '../repositories/ResetTokensRepository';
+
+import Hash from '../utils/Hash';
 import IUser from '../interfaces/User';
 import { deleteOldProfileImage } from '../utils/upload';
 import Password from '../utils/Password';
@@ -206,6 +208,17 @@ class UserController {
 
     const userToken = jwt.sign({ id: userFound.id }, resetPasswordSecretKey);
 
+    const creation_date = new Date();
+    const expiration_date = new Date();
+    expiration_date.setHours(creation_date.getHours() + 1);
+
+    await ResetTokenRepository.insert({
+      token: userToken,
+      creation_date,
+      expiration_date,
+      used: false,
+    });
+
     const emailSended = await sendResetPasswordEmail({
       emailTo: email,
       username: userFound.username,
@@ -244,6 +257,17 @@ class UserController {
         .status(401)
         .json({ error: 'Essa ação não foi autorizada!' });
     }
+
+    const resetToken = await ResetTokenRepository.findByToken(token);
+    const timeNow = new Date();
+
+    if (resetToken.used || timeNow > resetToken.expiration_date) {
+      return response
+        .status(401)
+        .json({ error: 'Token já utilizado ou expirou!' });
+    }
+
+    await ResetTokenRepository.setTokenToUsed(token);
 
     const passwordHash = Hash.passwordToHash(new_password);
 
