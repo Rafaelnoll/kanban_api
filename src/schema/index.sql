@@ -30,3 +30,10 @@ CREATE TABLE IF NOT EXISTS tasks(
   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS reset_tokens(
+  token VARCHAR PRIMARY KEY NOT NULL UNIQUE,
+  creation_date TIMESTAMP NOT NULL,
+  used BOOLEAN NOT NULL,
+  expiration_date TIMESTAMP NOT NULL
+);
