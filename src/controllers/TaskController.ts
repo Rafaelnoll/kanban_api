@@ -1,7 +1,21 @@
 import { Request, Response } from 'express';
 import TasksRepository from '../repositories/TasksRepository';
+import { TaskStatus } from '../interfaces/Task';
 
-class TaskController {
+interface Properties {
+  possibleStatusTypes: TaskStatus[];
+}
+
+class TaskController implements Properties {
+  possibleStatusTypes: TaskStatus[];
+
+  constructor() {
+    this.possibleStatusTypes = ['DO', 'DOING', 'DONE'];
+
+    this.store = this.store.bind(this);
+    this.updateStatus = this.updateStatus.bind(this);
+  }
+
   async index(request: Request, response: Response) {
     const user = request.user;
 
@@ -32,7 +46,7 @@ class TaskController {
         .json({ error: 'O título da tarefa é obrigatório!' });
     }
 
-    if (status && !['DO', 'DOING', 'DONE'].includes(status)) {
+    if (status && !this.possibleStatusTypes.includes(status)) {
       return response
         .status(400)
         .json({ error: "O campo de status deve ser 'DO', 'DONE' ou 'DOING'" });
@@ -66,6 +80,36 @@ class TaskController {
 
     if (!taskUpdated) {
       return response.status(404).json({ error: 'Tarefa não encontrada!' });
+    }
+
+    response.status(201).json(taskUpdated);
+  }
+
+  async updateStatus(request: Request, response: Response) {
+    const { status } = request.body;
+    const { id } = request.params;
+
+    if (!status) {
+      return response.status(400).json({ error: 'Status é obrigatório!' });
+    }
+
+    if (status && !this.possibleStatusTypes.includes(status)) {
+      return response
+        .status(400)
+        .json({ error: "O campo de status deve ser 'DO', 'DONE' ou 'DOING'" });
+    }
+
+    const taskUpdated = await TasksRepository.updateStatus(
+      {
+        status,
+      },
+      id,
+    );
+
+    if (!taskUpdated) {
+      return response
+        .status(500)
+        .json({ error: 'Não foi possível atualizar a tarefa!' });
     }
 
     response.status(201).json(taskUpdated);

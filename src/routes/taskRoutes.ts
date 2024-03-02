@@ -18,6 +18,7 @@ router.post('/tasks', authenticateToken, TaskController.store);
 
 // PUT
 router.put('/tasks/:id', authenticateToken, TaskController.update);
+router.put('/tasks/status/:id', authenticateToken, TaskController.updateStatus);
 
 // Delete
 router.delete('/tasks/:id', authenticateToken, TaskController.delete);

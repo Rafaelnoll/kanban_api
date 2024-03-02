@@ -93,6 +93,22 @@ class TasksRepository implements IRepository<ITask> {
     return row;
   }
 
+  async updateStatus({ status }: Pick<ITask, 'status'>, id: string) {
+    const [row] = await query(
+      `
+      UPDATE tasks
+      SET status = $2
+      WHERE id = $1
+      RETURNING tasks.* , (
+        SELECT name FROM categories WHERE categories.id = tasks.category_id
+      ) AS category_name;
+      `,
+      [id, status],
+    );
+
+    return row;
+  }
+
   async delete(id: string, user_id: string) {
     await query(
       `
